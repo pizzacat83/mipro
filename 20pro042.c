@@ -44,10 +44,10 @@ typedef struct Node_ {
     struct Node_* next;
 } Node;
 
-Node* new_node(Element value) {
+Node* new_node(const Element* const value_p) {
     Node* p;
     NEW(p, 1);
-    p->value = value;
+    p->value = *value_p;
     p->next = NULL;
     return p;
 }
@@ -146,13 +146,13 @@ void read_list(List* const list_p) {
         if (!ok) {
             break;
         }
-        push_back(list_p, new_node(element));
+        push_back(list_p, new_node(&element));
     }
 }
 
-Node* search(List list, Element q) {
+Node* search(List list, const Element* const q_p) {
     FOREACH (list, node_p) {
-        if (isEqual(&(node_p->value), &q)) {
+        if (isEqual(&(node_p->value), q_p)) {
             return node_p;
         }
     }
@@ -207,7 +207,7 @@ MatrixS transpose(MatrixS mat) {
     MatrixS matT = create_empty_matrix(mat.c, mat.r);
     for (size_t i=0; i < mat.r; ++i) {
         FOREACH(mat.rows[i], node_p) {
-            push_back(&matT.rows[node_p->value.j], new_node((Element){i, node_p->value.value}));
+            push_back(&matT.rows[node_p->value.j], new_node(&(Element){i, node_p->value.value}));
         }
     }
     return matT;
