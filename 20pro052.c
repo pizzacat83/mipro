@@ -86,12 +86,8 @@ void clear_list(List* const list_p) {
 
 #define FOREACH(list, node_p) for (Node* (node_p) = (list).head; (node_p) != NULL; (node_p) = (node_p)->next)
 
-void push_front(List* const list_p, const Node* const node_p) {
-    if (node_p->next != NULL) {
-        // because overwriting node_p->next might cause memory leak
-        fprintf(stderr, "pushed node is not NULL-ended\n");
-        exit(1);
-    }
+void push_front(List* const list_p, const Element* const element_p) {
+    Node* node_p = new_node(element_p);
     if (list_p->head == NULL) {
         // tail == NULL
         list_p->head = node_p;
@@ -102,12 +98,8 @@ void push_front(List* const list_p, const Node* const node_p) {
     node_p->next = list_p->head;
 }
 
-void push_back(List* const list_p, Node* const node_p) {
-    if (node_p->next != NULL) {
-        // because overwriting node_p->next might cause memory leak
-        fprintf(stderr, "pushed node is not NULL-ended\n");
-        exit(1);
-    }
+void push_back(List* const list_p, const Element* const element_p) {
+     Node* node_p = new_node(element_p);
     if (list_p->tail == NULL) {
         // head == NULL
         list_p->head = node_p;
@@ -148,7 +140,7 @@ void read_list(List* const list_p) {
         if (!ok) {
             break;
         }
-        push_back(list_p, new_node(&element));
+        push_back(list_p, &element);
     }
 }
 
@@ -204,9 +196,19 @@ MatrixS read_matrix() {
 MatrixS create_identity_matrix(size_t n) {
     MatrixS mat = create_empty_matrix(n,n);
     for (size_t i = 0; i < n; ++i) {
-        push_back(&mat.rows[i], new_node(&(Element){ j: i, value: 1 }));
+        push_back(&mat.rows[i], &(Element){ j: i, value: 1 });
     }
     return mat;
+}
+
+MatrixS clone_matrix(MatrixS mat) {
+    MatrixS mat2 = create_empty_matrix(mat.r, mat.c);
+    for (size_t i = 0; i < mat.r; ++i) {
+        FOREACH(mat.rows[i], np) {
+            push_back(&mat2.rows[i], &np->value);
+        }
+    }
+    return mat2;
 }
 
 void print_matrix(MatrixS mat) {
@@ -221,7 +223,7 @@ MatrixS transpose(MatrixS mat) {
     MatrixS matT = create_empty_matrix(mat.c, mat.r);
     for (size_t i=0; i < mat.r; ++i) {
         FOREACH(mat.rows[i], node_p) {
-            push_back(&matT.rows[node_p->value.j], new_node(&(Element){i, node_p->value.value}));
+            push_back(&matT.rows[node_p->value.j], &(Element){i, node_p->value.value});
         }
     }
     return matT;
@@ -256,7 +258,7 @@ MatrixS product(MatrixS A, MatrixS B) {
         for(size_t j = 0; j < BT.r; ++j) { // O(|nonzero(ai)|*B.c + |B_E|)
             MatrixElement x = dot(A.rows[i], BT.rows[j]); // O(|nonzero(ai)| + |nonzero(bj)|)
             if (x != 0) {
-                push_back(&(AB.rows[i]), new_node(&(Element) {j: j, value: x}));
+                push_back(&(AB.rows[i]), &(Element) {j: j, value: x});
             }
         }
     }
@@ -273,7 +275,7 @@ MatrixS power(MatrixS A, unsigned n) {
         maxk+=1;
     }
     MatrixS res = create_identity_matrix(A.r);
-    MatrixS A_2_k = product(create_identity_matrix(A.r), A);
+    MatrixS A_2_k = clone_matrix(A);
     for(int k = 0; k < maxk; ++k) {
         if ((n >> k) & 1) {
             MatrixS res_new = product(res, A_2_k);
@@ -306,19 +308,14 @@ Samples
 =======
 In
 --
-3 2
+2 2
 1 2.0 -1
-2 4.0 -1
-2 1.0 -1
-2 4
-1 3.0 4 1.0 -1
-2 4.0 3 2.0 4 3.0 -1
+2 3.0 -1
+5
 
 Out
 ---
-3 4
-1 6.0 4 2.0 -1
-2 16.0 3 8.0 4 12.0 -1
-2 4.0 3 2.0 4 3.0 -1
-
+2 2
+1 32.0 -1
+2 243.0 -1
 */
