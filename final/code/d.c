@@ -8,6 +8,8 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sys/time.h>
+#include "timer.h"
 
 #define NEW(p, n) {\
     (p) = malloc((n) * sizeof(p[0]));\
@@ -290,13 +292,13 @@ bool product(MatrixS A, MatrixS B, MatrixD AB) { // O(|nonzero(A)|*B.c + |nonzer
         return false;
     }
     for (size_t i = 0; i < A.r; ++i) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
-        FOREACH(A.rows[i], n1p) {
+        FOREACH(A.rows[i], n1p) { // O(|nonzero(a_i)||nonzero(b_k)|)
             size_t k = n1p->value.j;
             double Aik = n1p->value.value;
-            FOREACH(A.rows[k], n2p) {
+            FOREACH(B.rows[k], n2p) { // O(|nonzero(b_k)|)
                 size_t j = n2p->value.j;
-                double Akj = n2p->value.value;
-                AB.rows[i][j] += Aik * Akj;
+                double Bkj = n2p->value.value;
+                AB.rows[i][j] += Aik * Bkj;
             }
         }
     }
@@ -306,12 +308,24 @@ bool product(MatrixS A, MatrixS B, MatrixD AB) { // O(|nonzero(A)|*B.c + |nonzer
 
 // ----- main -----
 int main() {
+    tic();
     MatrixS A = read_matrix(); // O(|nonzero(A)|)
+    toc(1);
+    tic();
     MatrixD A2 = new_dense_matrix(A.r, A.c);
+    toc(2);
+    tic();
     product(A, A, A2); // O(|nonzero(A)|*A.r)
+    toc(3);
+    tic();
     print_dense_matrix(A2);
+    toc(4);
+    tic();
     clear_matrix(&A); // O(|nonzero(A)|)
+    toc(5);
+    tic();
     clear_dense_matrix(&A2);
+    toc(6);
     return 0;
 }
 

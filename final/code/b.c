@@ -8,6 +8,8 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sys/time.h>
+#include "timer.h"
 
 enum { MAX_SIZE = 5300 };
 
@@ -15,6 +17,7 @@ double A[MAX_SIZE][MAX_SIZE];
 double A2[MAX_SIZE][MAX_SIZE];
 
 int main() {
+    tic();
     size_t r, c;
     scanf("%ld %ld", &r, &c);
     // read A
@@ -30,15 +33,19 @@ int main() {
         }
     }
 
+    toc(1);
+    tic();
     // twice
-    for (int i = 0; i < r; ++i) {
-        for (int j = 0; j < c; ++j) {
-            for (int k = 0; k < r; ++k) {
+    for (size_t i = 0; i < r; ++i) {
+        for (size_t j = 0; j < c; ++j) {
+            for (size_t k = 0; k < r; ++k) {
                 A2[i][j] += A[i][k] * A[k][j];
             }
         }
     }
 
+    toc(2);
+    tic();
     // print
     printf("%ld %ld\n", r, c);
     for (size_t i = 0; i < r; ++i) {
@@ -49,6 +56,7 @@ int main() {
         }
         printf("-1\n");
     }
+    toc(3);
 
     return 0;
 }

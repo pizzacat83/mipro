@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <sys/time.h>
+#include "timer.h"
 
 #define NEW(p, n) {\
     (p) = malloc((n) * sizeof(p[0]));\
@@ -312,25 +313,6 @@ bool product(MatrixS A, MatrixS B, MatrixD AB) { // O(|nonzero(A)|*B.c + |nonzer
     return true;
 }
 
-// ----- timer -----
-
-#ifdef TICTOC
-struct timeval t_start;
-struct timeval t_stop;
-
-#define tic() do {\
-    gettimeofday(&t_start, NULL); \
-} while (0)
-
-#define toc(n) do {\
-    gettimeofday(&t_stop, NULL);\
-    fprintf(stderr, "%d: %lf ms\n", n, (double)(t_stop.tv_usec - t_start.tv_usec)/1000);\
-} while (0)
-#else
-#define tic()
-#define toc(n)
-#endif
-
 // ----- main -----
 int main() {
     tic();
@@ -355,23 +337,13 @@ int main() {
 }
 
 /* 
-
+timer
 =======
-In
---
-3 2
-1 2.0 -1
-2 4.0 -1
-2 1.0 -1
-2 4
-1 3.0 4 1.0 -1
-2 4.0 3 2.0 4 3.0 -1
-
-Out
----
-3 4
-1 6.0 4 2.0 -1
-2 16.0 3 8.0 4 12.0 -1
-2 4.0 3 2.0 4 3.0 -1
+1: 12.981000 ms
+2: 44.121000 ms
+3: 7.003000 ms
+4: 45.103000 ms
+5: 0.671000 ms
+6: 0.823000 ms
 
 */

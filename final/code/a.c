@@ -8,6 +8,8 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sys/time.h>
+#include "timer.h"
 
 #define NEW(p, n) {\
     (p) = malloc((n) * sizeof(p[0]));\
@@ -265,32 +267,31 @@ MatrixS product(MatrixS A, MatrixS B) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A
 // ----- main -----
 
 int main() {
+    tic();
     MatrixS A = read_matrix(); // O(|nonzero(A)|)
+    toc(1);
+    tic();
     MatrixS A2 = product(A, A); // O(|nonzero(A)|*A.r)
+    toc(2);
+    tic();
     print_matrix(A2); // O(|nonzero(A)|)
+    toc(3);
+    tic();
     clear_matrix(&A); // O(|nonzero(A)|)
+    toc(4);
+    tic();
     clear_matrix(&A2); // O(|nonzero(A)|)
+    toc(5);
     return 0;
 }
 
 /* 
-Samples
-=======
-In
---
-3 2
-1 2.0 -1
-2 4.0 -1
-2 1.0 -1
-2 4
-1 3.0 4 1.0 -1
-2 4.0 3 2.0 4 3.0 -1
-
-Out
----
-3 4
-1 6.0 4 2.0 -1
-2 16.0 3 8.0 4 12.0 -1
-2 4.0 3 2.0 4 3.0 -1
+timer
+=====
+1: 11.667000 ms
+2: 173.461000 ms
+3: 27.509000 ms
+4: 0.500000 ms
+5: 2.489000 ms
 
 */
