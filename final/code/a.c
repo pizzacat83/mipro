@@ -1,5 +1,7 @@
 /**
- * Solution of 5.2
+ * A: Solution of 5.2
+ * Requirement: None
+ * O(|nonzero(A)|*A.r)
  */
 
 #include <stdio.h>
@@ -242,32 +244,32 @@ MatrixElement dot(List v1, List v2) {
     return res;
 }
 
-MatrixS product(MatrixS A, MatrixS B) {
+MatrixS product(MatrixS A, MatrixS B) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
     if (A.c != B.r) {
         return create_empty_matrix(0, 0);
     }
-    MatrixS BT = transpose(B); // O(|B_E|)
+    MatrixS BT = transpose(B); // O(|nonzero(B)|)
     MatrixS AB = create_empty_matrix(A.r, B.c);
-    for (size_t i = 0; i < A.r; ++i) { // O(|A_E|*B.c + |B_E| * A.c)
-        for(size_t j = 0; j < BT.r; ++j) { // O(|nonzero(ai)|*B.c + |B_E|)
+    for (size_t i = 0; i < A.r; ++i) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
+        for(size_t j = 0; j < BT.r; ++j) { // O(|nonzero(ai)|*B.c + |nonzero(B)|)
             MatrixElement x = dot(A.rows[i], BT.rows[j]); // O(|nonzero(ai)| + |nonzero(bj)|)
             if (x != 0) {
                 push_back(&(AB.rows[i]), new_node(&(Element) {j: j, value: x}));
             }
         }
     }
-    clear_matrix(&BT); // O(|B_E|)
+    clear_matrix(&BT); // O(|nonzero(B)|)
     return AB;
 }
 
 // ----- main -----
 
 int main() {
-    MatrixS A = read_matrix();
-    MatrixS A2 = product(A, A);
-    print_matrix(A2);
-    clear_matrix(&A);
-    clear_matrix(&A2);
+    MatrixS A = read_matrix(); // O(|nonzero(A)|)
+    MatrixS A2 = product(A, A); // O(|nonzero(A)|*A.r)
+    print_matrix(A2); // O(|nonzero(A)|)
+    clear_matrix(&A); // O(|nonzero(A)|)
+    clear_matrix(&A2); // O(|nonzero(A)|)
     return 0;
 }
 

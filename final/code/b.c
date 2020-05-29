@@ -1,3 +1,9 @@
+/**
+ * B: Naive
+ * Requirement: None
+ * O(A.r^3)
+ */
+
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
