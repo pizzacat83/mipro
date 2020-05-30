@@ -8,7 +8,6 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <sys/time.h>
 #include "timer.h"
 
 #define NEW(p, n) {\

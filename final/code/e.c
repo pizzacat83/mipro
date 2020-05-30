@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include <sys/time.h>
 #include "timer.h"
 
 #define NEW(p, n) {\
@@ -301,9 +300,9 @@ bool product(MatrixS A, MatrixS B, MatrixD AB) { // O(|nonzero(A)|*B.c + |nonzer
         return false;
     }
 #endif
-    for (size_t i = 0; i < A.r; ++i) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
-        FOREACH(A.rows[i], n1p) { // O(|nonzero(a_i)||nonzero(b_k)|)
-            size_t k = n1p->value.j;
+    for (size_t k = 0; k < A.r; ++k) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
+        FOREACH(A.rows[k], n1p) { // O(|nonzero(a_i)||nonzero(b_k)|)
+            size_t i = n1p->value.j;
             FOREACH(B.rows[k], n2p) { // O(|nonzero(b_k)|)
                 size_t j = n2p->value.j;
                 ++AB.rows[i][j];
