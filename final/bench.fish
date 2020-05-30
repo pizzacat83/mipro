@@ -24,19 +24,20 @@ function run_code
     for i in (seq 1 10)
         set filename (printf "bcspwr%02d.txt" $i)
         time -a -o bench/$program.txt code/$program.out <in/$filename >out/$program/$filename
-        diff out/$program/$filename out/ans/$filename
+        colordiff out/$program/$filename out/ans/$filename
         if test $status -ne 0
             echo "answer is not correct";
             exit
         end
     end
+
     true > bench/$program.detail.txt;
     echo Measuring detailed time ...
     for i in (seq 1 10)
         set filename (printf "bcspwr%02d.txt" $i)
         eval ./code/$program.timer.out <in/$filename >/dev/null 2>>bench/$program.detail.txt
     end
-
+    
     echo Measuring Memory usage ...
     if test ! -e bench/$program.memory
         mkdir bench/$program.memory
@@ -45,6 +46,7 @@ function run_code
         set filename (printf "bcspwr%02d.txt" $i)
         valgrind 2>>/dev/null --tool=massif  --massif-out-file=bench/$program.memory/$i.txt code/$program.out  < in/$filename >/dev/null
     end
+
 end
 
 if test (count $argv) -eq 1
