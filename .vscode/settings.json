@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "type_traits": "c",
+        "stdbool.h": "c",
+        "cstdlib": "c"
+    },
+    "python.pythonPath": "final/.venv/bin/python3",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/.venv": true,
+    },
+}
