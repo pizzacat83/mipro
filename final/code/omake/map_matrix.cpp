@@ -5,7 +5,7 @@
 
 using namespace std;
 
-typedef int_least16_t MatrixElement;
+typedef double MatrixElement;
 typedef map<size_t, MatrixElement> Row;
 
 class MatrixM {
@@ -37,7 +37,7 @@ void read_row(Row& row) {
         size_t j = (size_t)(j1-1);
         double v;
         scanf("%lf", &v);
-        row.insert(make_pair(j, (int)v));
+        row.insert(make_pair(j, v));
     }
 }
 
@@ -56,7 +56,7 @@ void print_matrix(const MatrixM& mat) {
     for (size_t i = 0; i < mat.r; ++i) {
         const Row& row = mat.rows[i];
         for(auto itr = begin(row); itr != begin(row); ++itr) {
-            printf("%ld %d.000000 ", itr->first, itr->second);
+            printf("%ld %lf ", itr->first, itr->second);
         }
         printf("-1\n");
     }
@@ -68,12 +68,14 @@ bool product(const MatrixM& A, const MatrixM& B, MatrixM& AB) { // O(|nonzero(A)
         return false;
     }
 #endif
-    for (size_t i = 0; i < A.r; ++i) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
-        for(auto itr1 = begin(A.rows[i]); itr1 != end(A.rows[i]); ++itr1) { // O(|nonzero(a_i)||nonzero(b_k)|)
-            size_t k = itr1->first;
+    for (size_t k = 0; k < A.r; ++k) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
+        for(auto itr1 = begin(A.rows[k]); itr1 != end(A.rows[k]); ++itr1) { // O(|nonzero(a_i)||nonzero(b_k)|)
+            size_t i = itr1->first;
+            MatrixElement a_ki = itr1->second;
             for(auto itr2 = begin(B.rows[k]); itr2 != end(B.rows[k]); ++itr2) { // O(|nonzero(b_k)|)
                 size_t j = itr2->first;
-                ++AB.rows[i][j];
+                MatrixElement b_kj = itr2->second;
+                AB.rows[i][j] = a_ki * b_kj;
             }
         }
     }
@@ -110,13 +112,13 @@ g++ code/omake/MatrixM.cpp -o code/omake/a.out -O3
 
 10
 =====
-0.02user 0.00system 0:00.02elapsed 88%CPU (0avgtext+0avgdata 8320maxresident)k
-0inputs+0outputs (0major+1533minor)pagefaults 0swaps
+0.01user 0.00system 0:00.02elapsed 82%CPU (0avgtext+0avgdata 8424maxresident)k
+0inputs+0outputs (0major+1532minor)pagefaults 0swaps
 
-1: 9.023000 ms
-2: 0.092000 ms
-3: 6.904000 ms
+1: 16.459000 ms
+2: 0.076000 ms
+3: 10.143000 ms
 4: 0.088000 ms
-5: 0.301000 ms
-6: 1.109000 ms
+5: 0.317000 ms
+6: 1.923000 ms
 */
