@@ -290,14 +290,14 @@ bool product(MatrixS A, MatrixS B, MatrixD AB) { // O(|nonzero(A)|*B.c + |nonzer
     if (A.c != B.r) {
         return false;
     }
-    for (size_t i = 0; i < A.r; ++i) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
-        FOREACH(A.rows[i], n1p) { // O(|nonzero(a_i)||nonzero(b_k)|)
-            size_t k = n1p->value.j;
-            double Aik = n1p->value.value;
+    for (size_t k = 0; k < A.r; ++k) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
+        FOREACH(A.rows[k], n1p) { // O(|nonzero(a_i)||nonzero(b_k)|)
+            size_t i = n1p->value.j;
+            double Aki = n1p->value.value;
             FOREACH(B.rows[k], n2p) { // O(|nonzero(b_k)|)
                 size_t j = n2p->value.j;
                 double Bkj = n2p->value.value;
-                AB.rows[i][j] += Aik * Bkj;
+                AB.rows[i][j] += Aki * Bkj;
             }
         }
     }
