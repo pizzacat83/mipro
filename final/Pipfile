@@ -10,6 +10,8 @@ numpy = "*"
 matplotlib = "*"
 jupyterlab = "*"
 msparser = "*"
+pandas = "*"
+scipy = "*"
 
 [requires]
 python_version = "3.6"
