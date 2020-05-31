@@ -11,17 +11,29 @@
 #include <string.h>
 #include "timer.h"
 
+#define DEBUG
+
+#ifdef DEBUG
+#define NEW(p, n) {\
+    (p) = malloc((n) * sizeof(p[0]));\
+    if ((p) == NULL) {\
+        fprintf(stderr, "error in malloc (line #%d)\n", __LINE__);\
+        exit(1);\
+    }\
+}
+#else
 #define NEW(p, n) {\
     (p) = malloc((n) * sizeof(p[0]));\
 }
+#endif
 
 // ----- element -----
 
-typedef int MatrixElement;
+typedef double MatrixElement;
 
 typedef struct {
     size_t j;
-    int value;
+    MatrixElement value;
 } Element;
 
 bool isEqual(const Element* const a, const Element* const b) {
@@ -29,7 +41,7 @@ bool isEqual(const Element* const a, const Element* const b) {
 }
 
 void print_element(const Element* const element_p) {
-    printf("%ld %d.000000", element_p->j + 1, element_p->value);
+    printf("%ld %lf", element_p->j + 1, element_p->value);
 }
 
 bool read_element(Element* element_p) {
@@ -39,8 +51,7 @@ bool read_element(Element* element_p) {
         return false;
     }
     element_p->j = (size_t)(j1-1);
-    double v;
-    scanf("%lf", &v);
+    scanf("%lf", &element_p->value);
     return true;
 }
 
@@ -264,27 +275,29 @@ bool product(MatrixS A, MatrixS B, const MatrixS* AB) { // O(|nonzero(A)|*B.c + 
     for (size_t k = 0; k < A.r; ++k) { // O(|nonzero(A)|*B.c + |nonzero(B)| * A.c)
         FOREACH(A.rows[k], n1p) { // O(|nonzero(a_i)||nonzero(b_k)|)
             size_t i = n1p->value.j;
+            MatrixElement Aki = n1p->value.value;
             Node* abij_p = AB->rows[i].head;
             FOREACH(B.rows[k], n2p) { // O(|nonzero(b_k)|)
                 size_t j = n2p->value.j;
+                MatrixElement Bkj = n2p->value.value;
                 if (abij_p == NULL || abij_p->value.j > j) {
-                    abij_p = new_node(&(Element){j, 1});
+                    abij_p = new_node(&(Element){j, Aki * Bkj});
                     push_front(&AB->rows[i], abij_p);
                     continue;
                 }
 
                 while (1) {
                     if (abij_p->value.j == j) {
-                        ++(abij_p->value.value);
+                        abij_p->value.value += Aki * Bkj;
                         break;
                     }
                     if (abij_p->next == NULL) {
-                        abij_p = new_node(&(Element){j, 1});
+                        abij_p = new_node(&(Element){j, Aki * Bkj});
                         push_back(&AB->rows[i], abij_p);
                         break;
                     }
                     if (abij_p->next->value.j > j) {
-                        Node* abij_np = new_node(&(Element){j, 1});
+                        Node* abij_np = new_node(&(Element){j, Aki * Bkj});
                         insert_node_after(&AB->rows[i], abij_p, abij_np);
                         break;
                     }
