@@ -2,12 +2,15 @@ CC = gcc
 CFLAGS = -g -fsanitize=undefined -Werror -Wall -Wextra -Wconversion -Wbad-function-cast -Wcast-align -Wcast-qual -Wdisabled-optimization -Wdouble-promotion -Wfloat-equal -Wformat -Winit-self -Wjump-misses-init -Wlogical-op -Wmissing-include-dirs -Wmissing-prototypes -Wmultichar -Wpointer-arith -Wswitch-default -Wswitch-enum -Wundef -Wunsafe-loop-optimizations -Wwrite-strings
 
 SOURCES = $(wildcard *.c)
-DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
+AUTO_DEPENDS = $(patsubst %.c,%.o.d,$(SOURCES))
+MANUAL_DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
-%.d: %.c
-	$(CC) $< -MF $@ -MM $(CFLAGS)
+%.o.d: %.c
+	$(CC) -MF $@ $< -MM $(CFLAGS)
 
--include $(DEPENDS)
+%.out:
+	$(CC) -o $@ $^ $(CFLAGS)
+ 
+-include $(AUTO_DEPENDS)
 
-20pro081.out: 20pro081.o lists.o graph_lists.o graph_lists_element.o
-	$(CC) -o $@ $^ $(CFLAGS) 
+-include $(MANUAL_DEPENDS)
