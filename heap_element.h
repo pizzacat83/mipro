@@ -1,14 +1,14 @@
 #ifndef H_HEAP_ELEMENT
 #define H_HEAP_ELEMENT
 
-typedef struct HeapElement HeapElement;
+typedef struct Element Element;
 
-void heap_element_delete(HeapElement* const ep);
+void element_delete(Element* const ep);
 
-typedef int (*CmpFunc)(const HeapElement* const, const HeapElement* const);
+typedef int (*CmpFunc)(const Element* const, const Element* const);
 
-int cmp(const HeapElement* const x, const HeapElement* const y);
+int element_cmp(const Element* const x, const Element* const y);
 
-int revcmp(const HeapElement* const x, const HeapElement* const y);
+int element_revcmp(const Element* const x, const Element* const y);
 
 #endif

@@ -18,7 +18,7 @@ static size_t argmin(Heap heap, size_t i, size_t j) {
 }
 
 static void swap_node(Heap* const heap_p, size_t i, size_t j) {
-    HeapElement* tmp = heap_p->tree[i];
+    Element* tmp = heap_p->tree[i];
     heap_p->tree[i] = heap_p->tree[j];
     heap_p->tree[j] = tmp;
 }
@@ -49,7 +49,7 @@ static void heapify(Heap* const heap_p, size_t parent) {
     heapify(heap_p, new_parent);
 }
 
-Heap heap_create_from(HeapElement** array, size_t size, size_t max_size, CmpFunc cmp) {
+Heap heap_create_from(Element** array, size_t size, size_t max_size, CmpFunc cmp) {
     if (max_size < size) {
         fprintf(stderr, "Warning(heap_create_from): Heap max_size is smaller than size. Extending max_size to size.");
         max_size = size;
@@ -65,7 +65,7 @@ Heap heap_create_from(HeapElement** array, size_t size, size_t max_size, CmpFunc
     return heap;
 }
 
-const HeapElement* heap_top(Heap heap) {
+const Element* heap_top(Heap heap) {
     if (heap.size == 0) {
         return NULL;
     }
@@ -73,7 +73,7 @@ const HeapElement* heap_top(Heap heap) {
 }
 
 void heap_pop(Heap* const heap_p) {
-    heap_element_delete(heap_p->tree[0]);
+    element_delete(heap_p->tree[0]);
     heap_p->tree[0] = heap_p->tree[heap_p->size-1];
     --heap_p->size;
     heapify(heap_p, 0);
@@ -81,7 +81,7 @@ void heap_pop(Heap* const heap_p) {
 
 void heap_clear(Heap* const heap_p) {
     for (size_t i = 0; i < heap_p->size; ++i) {
-        heap_element_delete(heap_p->tree[i]);
+        element_delete(heap_p->tree[i]);
     }
     free(heap_p->tree);
     heap_p->tree = NULL;
