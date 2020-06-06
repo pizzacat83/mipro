@@ -1,9 +1,3 @@
-/**
- * D: loop i -> k -> j
- * Requirement: binary
- * O(|nonzero(A)|*A.r)
- */
-
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -180,7 +174,7 @@ typedef struct {
     List* rows;
 } MatrixS;
 
-MatrixS new_matrix(size_t r, size_t c) {
+MatrixS create_matrix(size_t r, size_t c) {
     MatrixS mat;
     mat.r = r;
     mat.c = c;
@@ -211,7 +205,7 @@ void clear_matrix(MatrixS* const mat) {
 MatrixS read_matrix() {
     size_t r, c;
     scanf("%ld %ld", &r, &c);
-    MatrixS mat = new_matrix(r, c);
+    MatrixS mat = create_matrix(r, c);
     for (size_t i = 0; i < r; ++i) {
         read_list(&(mat.rows[i]));
     }
@@ -227,7 +221,7 @@ void print_matrix(MatrixS mat) {
 
 // MatrixS transpose(MatrixS mat) {
 //     // O(|E|)
-//     MatrixS matT = new_matrix(mat.c, mat.r);
+//     MatrixS matT = create_matrix(mat.c, mat.r);
 //     for (size_t i=0; i < mat.r; ++i) {
 //         FOREACH(mat.rows[i], node_p) {
 //             push_back(&matT.rows[node_p->value.j], new_node(&(Element){i}));
@@ -308,7 +302,7 @@ int main() {
     MatrixS A = read_matrix(); // O(|nonzero(A)|)
     toc(1);
     tic();
-    MatrixS A2 = new_matrix(A.r, A.c);
+    MatrixS A2 = create_matrix(A.r, A.c);
     toc(2);
     tic();
     product(A, A, &A2); // O(|nonzero(A)|*A.r)
@@ -324,15 +318,3 @@ int main() {
     toc(6);
     return 0;
 }
-
-/* 
-timer
-=======
-1: 12.981000 ms
-2: 44.121000 ms
-3: 7.003000 ms
-4: 45.103000 ms
-5: 0.671000 ms
-6: 0.823000 ms
-
-*/
