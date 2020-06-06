@@ -2,7 +2,6 @@
 #define H_HEAP
 
 #include <stddef.h>
-
 #include "./heap_element.h"
 
 typedef struct {

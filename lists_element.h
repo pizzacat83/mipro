@@ -1,4 +1,8 @@
+#ifndef H_LISTS_ELEMENT
+#define H_LISTS_ELEMENT
+
 #include <stdbool.h>
+#include <stdio.h>
 
 typedef struct Element Element;
 
@@ -13,3 +17,5 @@ void element_print(const Element* const element_p, FILE* const fp);
 bool element_read(Element* element_p);
 
 bool element_is_equal(const Element* const a, const Element* const b);
+
+#endif
