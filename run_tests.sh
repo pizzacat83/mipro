@@ -4,10 +4,8 @@ set -eu
 
 pushd $(dirname $0) >/dev/null
 
-for file in *; do
-    if [ "$file" = "$(basename $0)" ]; then
-        continue;
-    fi
+for file in tests/*; do
+    echo [*] $file
     ./$file
 done
 
