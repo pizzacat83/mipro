@@ -2,9 +2,15 @@
     "files.associations": {
         "type_traits": "c",
         "stdbool.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "optional": "c",
+        "istream": "c",
+        "ostream": "c",
+        "system_error": "c",
+        "array": "c",
+        "tuple": "c",
+        "utility": "c"
     },
-    "python.pythonPath": "final/.venv/bin/python3",
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
@@ -12,5 +18,11 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/.venv": true,
+        "**/.venv-ubuntu": true,
+        "*.d": true,
+        "*.o": true,
+        "peda-session-*.txt": true,
+        "*.bak": true,
+        "*.out": true,
     },
 }
