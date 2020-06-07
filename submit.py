@@ -4,41 +4,8 @@ import re
 import sys
 from time import sleep
 
-probname = '20pro081'
-
-with open('submit.secrets.json') as f:
-    secrets = json.load(f)
-
-url = secrets["url"]
-
-session = requests.Session()
-
-print('Logging in ...')
-
-req = session.get(
-    f"{url}"
-)
-
-r=re.compile(r'<a href="problem.php\?id=(?P<id>\d+).+?>(?P<name>[a-zA-Z0-9]+)')
-
-probIds = dict([(b,a) for a,b in r.findall(req.text)])
-
-sleep(1)
-
-req = session.post(
-    f"{url}/public/login.php",
-    data = {
-        "cmd": "login",
-        "login": secrets["username"],
-        "passwd": secrets["password"],
-    }
-)
-
-print(req.status_code)
-
-sleep(1)
-
-print('Submitting ...')
+probname = sys.argv[1].split('.')[0]
+print('Submitting', probname)
 
 files = set()
 
@@ -64,8 +31,37 @@ def add_dependency(filename1):
 
 add_dependency(f"{probname}.c")
 
-print(files)
+print('These files will be uploaded:', files)
 
+exit()
+
+with open('submit.secrets.json') as f:
+    secrets = json.load(f)
+
+url = secrets["url"]
+
+session = requests.Session()
+
+print('Logging in ...')
+
+req = session.post(
+    f"{url}/public/login.php",
+    data = {
+        "cmd": "login",
+        "login": secrets["username"],
+        "passwd": secrets["password"],
+    }
+)
+
+req.raise_for_status()
+
+r=re.compile(r'<a href="problem.php\?id=(?P<id>\d+).+?>(?P<name>[a-zA-Z0-9]+)')
+
+probIds = dict([(b,a) for a,b in r.findall(req.text)])
+
+sleep(1)
+
+print('Submitting ...')
 
 req = session.post(
     f"{url}/team/upload.php",
@@ -73,4 +69,4 @@ req = session.post(
     data={'probid': probIds[probname], 'langid': 'c', "submit": "submit"},
 )
 
-print(req.status_code)
+req..raise_for_status()
