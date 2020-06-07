@@ -1,5 +1,5 @@
-#ifndef H_GRAPH_SLIST
-#define H_GRAPH_SLIST
+#ifndef H_GRAPH_LISTS
+#define H_GRAPH_LISTS
 
 #include <stddef.h>
 #include "memory.h"

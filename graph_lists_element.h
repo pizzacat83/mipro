@@ -1,5 +1,5 @@
-#ifndef H_ELEMENT_SLIST_GRAPH
-#define H_ELEMENT_SLIST_GRAPH
+#ifndef H_GRAPH_LISTS_ELEMENT
+#define H_GRAPH_LISTS_ELEMENT
 
 #include <stddef.h>
 #include "lists.h"
