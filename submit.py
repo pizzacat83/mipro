@@ -4,6 +4,11 @@ import re
 import sys
 from time import sleep
 
+if len(sys.argv) <= 1:
+    print("Error: Missing problem name.")
+    print("Usage: python3 submit.py problem_name")
+    exit(1)
+
 probname = sys.argv[1].split('.')[0]
 print('Submitting', probname)
 
@@ -32,8 +37,6 @@ def add_dependency(filename1):
 add_dependency(f"{probname}.c")
 
 print('These files will be uploaded:', files)
-
-exit()
 
 with open('submit.secrets.json') as f:
     secrets = json.load(f)
@@ -70,6 +73,8 @@ req = session.post(
 )
 
 req.raise_for_status()
+
+sleep(1)
 
 print('Logging out ...')
 
