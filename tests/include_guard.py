@@ -16,9 +16,16 @@ def check_file(abspath, autofix=False):
     def writefixed(text):
         if autofix:
             print(text)
+
+    def flushbuf(buf):
+        for t in buf:
+            writefixed(t)
+        buf.clear()
+
     relpath = f'./{path.relpath(abspath)}'
     filename = path.splitext(path.basename(abspath))[0]
     with fileinput.FileInput(abspath, inplace=autofix, backup='.bak') as f:
+        buf = []
         for i, line in enumerate(map(lambda s: s.strip('\n'), f)):
             if i == 0:
                 expected = f'H_{filename.upper()}'
@@ -30,8 +37,9 @@ def check_file(abspath, autofix=False):
                         errors.append(dict(i=i, fixable=True, msg=f'#ifndef symbol `{actual}` should be `{expected}`'))
                         writefixed(f'#ifndef {expected}')
                 else:
-                    errors.append(dict(i=i, fixable=False, msg=f'Missing #ifndef'))
-                    writefixed(line)
+                    errors.append(dict(i=i, fixable=True, msg=f'Missing #ifndef'))
+                    buf.append(line)
+                    writefixed(f'#ifndef {expected}')
             elif i == 1:
                 ok = True
                 expected = f'H_{filename.upper()}'
@@ -39,15 +47,23 @@ def check_file(abspath, autofix=False):
                     actual = re.sub(rdefine, '', line, 1)
                     if actual == expected:
                         writefixed(line)
+                        flushbuf(buf)
                     else:
                         errors.append(dict(i=i, fixable=True, msg=f'#define symbol `{actual}` should be `{expected}`'))
                         writefixed(f'#define {expected}')
+                        flushbuf(buf)
                 else:
-                    errors.append(msg=dict(i=i, fixable=False, msg=f'Missing #define'))
+                    errors.append(dict(i=i, fixable=True, msg=f'Missing #define'))
+                    writefixed(f'#define {expected}')
+                    writefixed('')
+                    flushbuf(buf)
                     writefixed(line)
             else:
                 writefixed(line)
-    # TODO: check tail endif
+        if not re.match('^#endif\s*$', line):
+            errors.append(dict(i=i, fixable=True, msg=f'Missing #endif'))
+            with open(abspath, 'a') as f:
+                print('#endif', file=f)
     return [{"path": relpath, **err} for err in errors]
 
 parser = argparse.ArgumentParser()
