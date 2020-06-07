@@ -12,56 +12,64 @@ rdefine = re.compile(r'^#define\s+')
 
 def check_file(abspath, autofix=False):
     errors = []
+    def writefixed(text):
+        if autofix:
+            print(text)
     relpath = f'./{path.relpath(abspath)}'
     filename = path.splitext(path.basename(abspath))[0]
     with fileinput.FileInput(abspath, inplace=autofix, backup='.bak') as f:
         for i, line in enumerate(map(lambda s: s.strip('\n'), f)):
-            errprefix = f'{relpath}:{i + 1}:'
             if i == 0:
                 expected = f'H_{filename.upper()}'
-                ok = True
                 if rifndef.match(line):
                     actual = re.sub(rifndef, '', line, 1)
-                    if actual != expected:
-                        errors.append(f'{errprefix} #ifndef symbol `{actual}` should be `{expected}`')
-                        ok = False
-                else:
-                    errors.append(f'{errprefix} Missing #ifndef')
-                    ok = False
-                if autofix:
-                    if ok:
-                        print(line)
+                    if actual == expected:
+                        writefixed(line)
                     else:
-                        print(f'#ifndef {expected}')
+                        errors.append(dict(i=i, fixable=True, msg=f'#ifndef symbol `{actual}` should be `{expected}`'))
+                        writefixed(f'#ifndef {expected}')
+                else:
+                    errors.append(dict(i=i, fixable=False, msg=f'Missing #ifndef'))
+                    writefixed(line)
             elif i == 1:
                 ok = True
                 expected = f'H_{filename.upper()}'
                 if rdefine.match(line):
                     actual = re.sub(rdefine, '', line, 1)
-                    if actual != expected:
-                        errors.append(f'{errprefix} #define symbol `{actual}` should be `{expected}`')
-                        ok = False
-                else:
-                    errors.append(f'{errprefix} Missing #define')
-                    ok = False
-                if autofix:
-                    if ok:
-                        print(line)
+                    if actual == expected:
+                        writefixed(line)
                     else:
-                        print(f'#define {expected}')
-            else:
-                if autofix:
-                    print(line)
+                        errors.append(dict(i=i, fixable=True, msg=f'#define symbol `{actual}` should be `{expected}`'))
+                        writefixed(f'#define {expected}')
+                else:
+                    errors.append(msg=dict(i=i, fixable=False, msg=f'Missing #define'))
+                    writefixed(line)
     # TODO: check tail endif
-    return errors
+    return [{"path": relpath, **err} for err in errors]
+
+autofix = False
 
 errors = []
 i = 0
 for filepath in map(path.normpath, glob.iglob(f'{srcdir}/*.h')):
-    errors += check_file(filepath, autofix=True)
+    errors += check_file(filepath, autofix=autofix)
     i += 1
 
 print(f'Checked {i} file(s).', file=sys.stderr)
 
+fixability_text = {
+    True: {
+        True:  '[   FIXED   ]',
+        False: '[ NOT FIXED ]'
+    },
+    False: {
+        True:  '[   FIXABLE   ]',
+        False: '[ NON-FIXABLE ]',
+    },
+}
+
 if errors:
-    raise Exception('\n'.join(['Header check failed', *errors])) # print all errors
+    raise Exception('\n'.join([
+        'Header check failed',
+        *[f"{fixability_text[autofix][e['fixable']]} {e['path']}:{e['i'] + 1}: {e['msg']}" for e in errors]
+    ])) # print all errors
