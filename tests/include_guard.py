@@ -3,6 +3,7 @@ import sys
 import glob
 import re
 import fileinput
+import argparse
 
 scriptdir = path.dirname(path.abspath(__file__))
 srcdir = path.join(scriptdir, '..') # このスクリプトのあるディレクトリから見たソースディレクトリの相対パス
@@ -44,15 +45,19 @@ def check_file(abspath, autofix=False):
                 else:
                     errors.append(msg=dict(i=i, fixable=False, msg=f'Missing #define'))
                     writefixed(line)
+            else:
+                writefixed(line)
     # TODO: check tail endif
     return [{"path": relpath, **err} for err in errors]
 
-autofix = False
+parser = argparse.ArgumentParser()
+parser.add_argument("--fix", help="autofix fixable problems", action='store_true')
+args = parser.parse_args()
 
 errors = []
 i = 0
 for filepath in map(path.normpath, glob.iglob(f'{srcdir}/*.h')):
-    errors += check_file(filepath, autofix=autofix)
+    errors += check_file(filepath, autofix=args.fix)
     i += 1
 
 print(f'Checked {i} file(s).', file=sys.stderr)
@@ -71,5 +76,5 @@ fixability_text = {
 if errors:
     raise Exception('\n'.join([
         'Header check failed',
-        *[f"{fixability_text[autofix][e['fixable']]} {e['path']}:{e['i'] + 1}: {e['msg']}" for e in errors]
+        *[f"{fixability_text[args.fix][e['fixable']]} {e['path']}:{e['i'] + 1}: {e['msg']}" for e in errors]
     ])) # print all errors
