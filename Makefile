@@ -19,6 +19,7 @@ O_DEPENDS = $(patsubst %.c,%.o.d,$(SOURCES))
 	sed -e 's/^/$(patsubst %.o.d,%.out,$@): /' -e 's/$$/\n/' > $@
 
 %.out:
+	bash tests/run_tests.sh
 	$(CC) -o $@ $^ $(CFLAGS)
  
 -include $(C_DEPENDS)
