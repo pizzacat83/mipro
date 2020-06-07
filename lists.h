@@ -1,3 +1,6 @@
+#ifndef H_LISTS
+#define H_LISTS
+
 #include <stdio.h>
 #include "./lists_element.h"
 
@@ -30,3 +33,5 @@ void lists_print(ListS list, FILE* fp);
 void lists_read(ListS* const list_p);
 
 ListSNode* lists_search(ListS list, const Element* const q_p);
+
+#endif
