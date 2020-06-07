@@ -69,4 +69,14 @@ req = session.post(
     data={'probid': probIds[probname], 'langid': 'c', "submit": "submit"},
 )
 
-req..raise_for_status()
+req.raise_for_status()
+
+print('Logging out ...')
+
+req = session.get(
+    f"{url}/auth/logout.php"
+)
+
+req.raise_for_status()
+
+print('Done.')
