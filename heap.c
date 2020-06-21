@@ -98,9 +98,18 @@ void clear(Heap* const heap_p) {
     heap_p->max_size = 0;
 }
 
+static void expand(Heap* const heap_p, size_t max_size) {
+    if (heap_p->max_size > max_size) {
+        fprintf(stderr, "Attempt to shrink heap. Ignoring.\n");
+        return;
+    }
+    RENEW(heap_p->tree, max_size);
+    heap_p->max_size = max_size;
+}
+
 void insert(Heap* const heap_p, HeapElement* const element_p) {
     if (heap_p->max_size == heap_p->size) {
-        // TODO: expand
+        expand(heap_p, heap_p->max_size * 2);
     }
     heap_p->tree[heap_p->size] = element_p;
     size_t child = heap_p->size;
