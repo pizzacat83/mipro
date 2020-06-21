@@ -4,7 +4,7 @@
 #include "./memory.h"
 #include "./heap.h"
 
-Heap heap_create_empty(size_t max_size, CmpFunc cmp) {
+Heap create_empty(size_t max_size, CmpFunc cmp) {
     Heap heap;
     heap.max_size = max_size;
     heap.size = 0;
@@ -49,7 +49,7 @@ static void heapify(Heap* const heap_p, size_t parent) {
     heapify(heap_p, new_parent);
 }
 
-Heap heap_create_from(Element** array, size_t size, size_t max_size, CmpFunc cmp) {
+Heap create_from(Element** array, size_t size, size_t max_size, CmpFunc cmp) {
     if (max_size < size) {
         fprintf(stderr, "Warning(heap_create_from): Heap max_size is smaller than size. Extending max_size to size.");
         max_size = size;
@@ -65,21 +65,21 @@ Heap heap_create_from(Element** array, size_t size, size_t max_size, CmpFunc cmp
     return heap;
 }
 
-const Element* heap_top(Heap heap) {
+const Element* top(Heap heap) {
     if (heap.size == 0) {
         return NULL;
     }
     return heap.tree[0];
 }
 
-void heap_pop(Heap* const heap_p) {
+void pop(Heap* const heap_p) {
     element_delete(heap_p->tree[0]);
     heap_p->tree[0] = heap_p->tree[heap_p->size-1];
     --heap_p->size;
     heapify(heap_p, 0);
 }
 
-void heap_clear(Heap* const heap_p) {
+void clear(Heap* const heap_p) {
     for (size_t i = 0; i < heap_p->size; ++i) {
         element_delete(heap_p->tree[i]);
     }
@@ -88,3 +88,5 @@ void heap_clear(Heap* const heap_p) {
     heap_p->size = 0;
     heap_p->max_size = 0;
 }
+
+HeapFuncs HEAP = {create_empty, create_from, clear, top, pop};

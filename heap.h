@@ -11,15 +11,14 @@ typedef struct {
     CmpFunc cmp;
 } Heap;
 
-Heap heap_create_empty(size_t max_size, CmpFunc cmp);
+typedef struct {
+    Heap (*create_empty)(size_t max_size, CmpFunc cmp);
+    Heap (*create_from)(Element** array, size_t size, size_t max_size, CmpFunc cmp);
+    void (*clear)(Heap* const heap_p);
+    const Element* (*top)(Heap heap);
+    void (*pop)(Heap* const heap_p);
+} HeapFuncs;
 
-Heap heap_create_from(Element** array, size_t size, size_t max_size, CmpFunc cmp);
-
-void heap_clear(Heap* const heap_p);
-
-const Element* heap_top(Heap heap);
-
-void heap_pop(Heap* const heap_p);
-
+extern HeapFuncs HEAP;
 
 #endif
