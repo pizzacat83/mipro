@@ -29,6 +29,9 @@ ListS lists_create_empty() {
 void lists_erase_front(ListS* const list_p) {
     ListSNode* node_p = list_p->head;
     list_p->head = node_p->next;
+    if (list_p->head == NULL) {
+        list_p->tail = NULL;
+    }
     node_delete(node_p);
 }
 
