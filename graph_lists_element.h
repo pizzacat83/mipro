@@ -9,6 +9,6 @@ struct ListSElement {
     int cost;
 };
 
-void element_clone(const ListSElement* const src, ListSElement* const dst);
+void lists_element_clone(const ListSElement* const src, ListSElement* const dst);
 
 #endif

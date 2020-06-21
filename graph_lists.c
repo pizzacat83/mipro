@@ -39,7 +39,7 @@ GraphListS graph_lists_transpose(GraphListS graph) {
     GraphListS graphT = graph_empty_create(graph.vertex_num, graph.edge_num);
     for (size_t i = 0; i < graph.vertex_num; ++i) {
         LISTS_FOREACH(graph.edges[i], node_p) {
-            ListSElement* ep = element_new();
+            ListSElement* ep = lists_element_new();
             ep->cost = node_p->value->cost;
             ep->j = i;
             lists_push_back(&graphT.edges[node_p->value->j], ep);

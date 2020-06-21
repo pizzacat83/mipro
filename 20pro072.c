@@ -14,7 +14,7 @@ int main() {
         scanf("%d", &ep->value);
         data[i] = ep;
     }
-    Heap heap = HEAP.create_from(data, size, size, element_revcmp);
+    Heap heap = HEAP.create_from(data, size, size, heap_element_revcmp);
     for (size_t i = 0; i < size; ++i) {
         printf("%d\n", HEAP.top(heap)->value);
         HEAP.pop(&heap);

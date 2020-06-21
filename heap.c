@@ -32,6 +32,10 @@ static size_t rchild(size_t parent) {
     return 2 * (parent+1) + 1 - 1;
 }
 
+static size_t parent(size_t child) {
+    return child / 2;
+}
+
 static void heapify(Heap* const heap_p, size_t parent) {
     size_t new_parent = parent;
     size_t l = lchild(parent);
@@ -74,7 +78,7 @@ const HeapElement* top(Heap heap) {
 }
 
 void pop(Heap* const heap_p) {
-    element_delete(heap_p->tree[0]);
+    heap_element_delete(heap_p->tree[0]);
     heap_p->tree[0] = heap_p->tree[heap_p->size-1];
     --heap_p->size;
     heapify(heap_p, 0);
@@ -82,12 +86,21 @@ void pop(Heap* const heap_p) {
 
 void clear(Heap* const heap_p) {
     for (size_t i = 0; i < heap_p->size; ++i) {
-        element_delete(heap_p->tree[i]);
+        heap_element_delete(heap_p->tree[i]);
     }
     free(heap_p->tree);
     heap_p->tree = NULL;
     heap_p->size = 0;
     heap_p->max_size = 0;
+}
+
+void insert(Heap* const heap_p, HeapElement* const element_p) {
+    if (heap_p->max_size == heap_p->size) {
+        // TODO: expand
+    }
+    heap_p->tree[heap_p->size] = element_p;
+    size_t child = heap_p->size + parent(0); //
+    printf("%ld", child);
 }
 
 HeapFuncs HEAP = {create_empty, create_from, clear, top, pop};

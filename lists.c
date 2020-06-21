@@ -13,7 +13,7 @@ static ListSNode* node_new(ListSElement* const value_p) {
 }
 
 static void node_delete(ListSNode* const p) {
-    element_delete(p->value);
+    lists_element_delete(p->value);
     free(p);
 }
 
@@ -79,7 +79,7 @@ void lists_insert_after(ListS* const list_p, ListSNode* const parent_p, ListSEle
 
 void lists_print(ListS list, FILE* fp) {
     FOREACH(list, node_p) {
-        element_print(node_p->value, fp);
+        lists_element_print(node_p->value, fp);
         fprintf(fp, " ");
     }
     fprintf(fp, "-1\n");
@@ -88,10 +88,10 @@ void lists_print(ListS list, FILE* fp) {
 void lists_read(ListS* const list_p) {
     *list_p = lists_create_empty();
     while (1) {
-        ListSElement* element_p = element_new();
-        bool ok = element_read(element_p);
+        ListSElement* element_p = lists_element_new();
+        bool ok = lists_element_read(element_p);
         if (!ok) {
-            element_delete(element_p);
+            lists_element_delete(element_p);
             break;
         }
         lists_push_back(list_p, element_p);
@@ -100,7 +100,7 @@ void lists_read(ListS* const list_p) {
 
 ListSNode* lists_search(ListS list, const ListSElement* const q_p) {
     FOREACH (list, node_p) {
-        if (element_is_equal(node_p->value, q_p)) {
+        if (lists_element_is_equal(node_p->value, q_p)) {
             return node_p;
         }
     }
