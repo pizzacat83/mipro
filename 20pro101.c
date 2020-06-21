@@ -7,22 +7,18 @@
 #include "graph_lists.h"
 #include "graph_lists_element.h"
 
-int main() {
-    GraphListS graph = graph_lists_read();
-
-    Heap heap = HEAP.create_empty(2, heap_element_cmp);
-    HeapElement* ep;
-    NEW(ep, 1);
-    ep->n = 0;
-    ep->x = 0;
-    HEAP.insert(&heap, ep);
-
-    double* d;
-    NEW(d, graph.vertex_num);
+void dijkstra(GraphListS graph, size_t start, double* d) {
     for (size_t i = 0; i < graph.vertex_num; ++i) {
         d[i] = INFINITY;
     }
-    d[0] = 0;
+    d[start] = 0;
+
+    Heap heap = HEAP.create_empty(graph.edge_num, heap_element_cmp);
+    HeapElement* ep;
+    NEW(ep, 1);
+    ep->n = start;
+    ep->x = 0;
+    HEAP.insert(&heap, ep);
 
     while (!HEAP.empty(&heap)) {
         const HeapElement* top = HEAP.top(heap);
@@ -35,7 +31,6 @@ int main() {
         LISTS_FOREACH(graph.edges[v], node_p) {
             ListSElement* e = node_p->value;
             if (d[e->j] > d[v] + e->cost) {
-                fprintf(stderr, "update %ld: %lf -> %lf by %ld\n", e->j + 1, d[e->j], d[v] + e->cost, v + 1);
                 d[e->j] = d[v] + e->cost;
                 HeapElement* ep;
                 NEW(ep, 1);
@@ -47,12 +42,22 @@ int main() {
         HEAP.pop(&heap);
     }
 
+    HEAP.clear(&heap);
+}
+
+int main() {
+    GraphListS graph = graph_lists_read();
+
+    double* d;
+    NEW(d, graph.vertex_num);
+
+    dijkstra(graph, 0, d);
+
     for (size_t i = 0; i < graph.vertex_num; ++i) {
         printf("%ld %f\n", i + 1, d[i]);
     }
 
     graph_lists_clear(&graph);
-    HEAP.clear(&heap);
     free(d);
     return 0;
 }
