@@ -4,7 +4,7 @@
 #include "./lists_element.h"
 
 // ----- node -----
-static ListSNode* node_new(Element* const value_p) {
+static ListSNode* node_new(ListSElement* const value_p) {
     ListSNode* np;
     NEW(np, 1);
     np->value = value_p;
@@ -43,7 +43,7 @@ void lists_clear(ListS* const list_p) {
 
 #define FOREACH(list, node_p) for (ListSNode* (node_p) = (list).head; (node_p) != NULL; (node_p) = (node_p)->next)
 
-void lists_push_front(ListS* const list_p, Element* const element_p) {
+void lists_push_front(ListS* const list_p, ListSElement* const element_p) {
     ListSNode* node_p = node_new(element_p);
     if (list_p->head == NULL) {
         // tail == NULL
@@ -55,7 +55,7 @@ void lists_push_front(ListS* const list_p, Element* const element_p) {
     }
 }
 
-void lists_push_back(ListS* const list_p, Element* const element_p) {
+void lists_push_back(ListS* const list_p, ListSElement* const element_p) {
     ListSNode* node_p = node_new(element_p);
     if (list_p->tail == NULL) {
         // head == NULL
@@ -67,7 +67,7 @@ void lists_push_back(ListS* const list_p, Element* const element_p) {
     }
 }
 
-void lists_insert_after(ListS* const list_p, ListSNode* const parent_p, Element* const element_p) {
+void lists_insert_after(ListS* const list_p, ListSNode* const parent_p, ListSElement* const element_p) {
     ListSNode* child_p = node_new(element_p);
     if (parent_p->next == NULL) {
         // update tail
@@ -88,7 +88,7 @@ void lists_print(ListS list, FILE* fp) {
 void lists_read(ListS* const list_p) {
     *list_p = lists_create_empty();
     while (1) {
-        Element* element_p = element_new();
+        ListSElement* element_p = element_new();
         bool ok = element_read(element_p);
         if (!ok) {
             element_delete(element_p);
@@ -98,7 +98,7 @@ void lists_read(ListS* const list_p) {
     }
 }
 
-ListSNode* lists_search(ListS list, const Element* const q_p) {
+ListSNode* lists_search(ListS list, const ListSElement* const q_p) {
     FOREACH (list, node_p) {
         if (element_is_equal(node_p->value, q_p)) {
             return node_p;

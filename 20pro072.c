@@ -6,10 +6,10 @@
 int main() {
     size_t size;
     scanf("%ld", &size);
-    Element** data;
+    HeapElement** data;
     NEW(data, size);
     for (size_t i = 0; i < size; ++i) {
-        Element* ep;
+        HeapElement* ep;
         NEW(ep, 1);
         scanf("%d", &ep->value);
         data[i] = ep;

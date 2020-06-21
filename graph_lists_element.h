@@ -4,11 +4,11 @@
 #include <stddef.h>
 #include "lists.h"
 
-struct Element {
+struct ListSElement {
     size_t j;
     int cost;
 };
 
-void element_clone(const Element* const src, Element* const dst);
+void element_clone(const ListSElement* const src, ListSElement* const dst);
 
 #endif

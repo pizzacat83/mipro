@@ -12,7 +12,7 @@ int main() {
     --s;
     --t;
     ListS queue = lists_create_empty();
-    Element* ep;
+    ListSElement* ep;
     NEW(ep, 1);
     ep->j = s;
     ep->cost = 1;
@@ -32,7 +32,7 @@ int main() {
             size_t u = edge_p->value->j;
             if (d[u] == -1) {
                 d[u] = d[v] + 1;
-                Element* ep;
+                ListSElement* ep;
                 NEW(ep, 1);
                 ep->j = u;
                 ep->cost = 1;

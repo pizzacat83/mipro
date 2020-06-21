@@ -1,3 +1,4 @@
+#pragma GCC diagnostic ignored "-Wmissing-prototypes"
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -18,7 +19,7 @@ static size_t argmin(Heap heap, size_t i, size_t j) {
 }
 
 static void swap_node(Heap* const heap_p, size_t i, size_t j) {
-    Element* tmp = heap_p->tree[i];
+    HeapElement* tmp = heap_p->tree[i];
     heap_p->tree[i] = heap_p->tree[j];
     heap_p->tree[j] = tmp;
 }
@@ -49,7 +50,7 @@ static void heapify(Heap* const heap_p, size_t parent) {
     heapify(heap_p, new_parent);
 }
 
-Heap create_from(Element** array, size_t size, size_t max_size, CmpFunc cmp) {
+Heap create_from(HeapElement** array, size_t size, size_t max_size, CmpFunc cmp) {
     if (max_size < size) {
         fprintf(stderr, "Warning(heap_create_from): Heap max_size is smaller than size. Extending max_size to size.");
         max_size = size;
@@ -65,7 +66,7 @@ Heap create_from(Element** array, size_t size, size_t max_size, CmpFunc cmp) {
     return heap;
 }
 
-const Element* top(Heap heap) {
+const HeapElement* top(Heap heap) {
     if (heap.size == 0) {
         return NULL;
     }

@@ -1,7 +1,7 @@
 #ifndef H_ELEMENT_INT
 #define H_ELEMENT_INT
 
-struct Element {
+struct HeapElement {
     int value;
 };
 
