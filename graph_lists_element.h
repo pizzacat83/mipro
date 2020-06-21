@@ -6,7 +6,7 @@
 
 struct ListSElement {
     size_t j;
-    int cost;
+    double cost;
 };
 
 void lists_element_clone(const ListSElement* const src, ListSElement* const dst);

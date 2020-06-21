@@ -1,6 +1,6 @@
 #include <malloc.h>
 #include "./heap_element.h"
-#include "./element_double_int.h"
+#include "./element_double_size_t.h"
 
 void heap_element_delete(HeapElement* const ep) {
     free(ep);

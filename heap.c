@@ -125,4 +125,8 @@ void insert(Heap* const heap_p, HeapElement* const element_p) {
     ++heap_p->size;
 }
 
-HeapFuncs HEAP = {create_empty, create_from, clear, top, pop, insert};
+bool empty(const Heap* const heap_p) {
+    return heap_p->size == 0;
+}
+
+HeapFuncs HEAP = {create_empty, create_from, clear, top, pop, insert, empty};

@@ -2,6 +2,7 @@
 #define H_HEAP
 
 #include <stddef.h>
+#include <stdbool.h>
 #include "./heap_element.h"
 
 typedef struct {
@@ -18,6 +19,7 @@ typedef struct {
     const HeapElement* (*top)(Heap heap);
     void (*pop)(Heap* const heap_p);
     void (*insert)(Heap* const heap_p, HeapElement* const element_p);
+    bool (*empty)(const Heap* const heap_p);
 } HeapFuncs;
 
 extern HeapFuncs HEAP;
