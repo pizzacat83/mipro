@@ -17,6 +17,7 @@ typedef struct {
     void (*clear)(Heap* const heap_p);
     const HeapElement* (*top)(Heap heap);
     void (*pop)(Heap* const heap_p);
+    void (*insert)(Heap* const heap_p, HeapElement* const element_p);
 } HeapFuncs;
 
 extern HeapFuncs HEAP;

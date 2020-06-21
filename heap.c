@@ -33,7 +33,11 @@ static size_t rchild(size_t parent) {
 }
 
 static size_t parent(size_t child) {
-    return child / 2;
+    return (child + 1) / 2 - 1;
+}
+
+static size_t is_top(size_t node) {
+    return node == 0;
 }
 
 static void heapify(Heap* const heap_p, size_t parent) {
@@ -99,8 +103,17 @@ void insert(Heap* const heap_p, HeapElement* const element_p) {
         // TODO: expand
     }
     heap_p->tree[heap_p->size] = element_p;
-    size_t child = heap_p->size + parent(0); //
-    printf("%ld", child);
+    size_t child = heap_p->size;
+    while (!is_top(child)) {
+        size_t p = parent(child);
+        if (heap_p->cmp(heap_p->tree[p], heap_p->tree[child]) == 1) {
+            swap_node(heap_p, p, child);
+            child = p;
+        } else {
+            break;
+        }
+    }
+    ++heap_p->size;
 }
 
-HeapFuncs HEAP = {create_empty, create_from, clear, top, pop};
+HeapFuncs HEAP = {create_empty, create_from, clear, top, pop, insert};
