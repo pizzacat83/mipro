@@ -21,4 +21,6 @@ void graph_lists_print(GraphListS graph, FILE* const fp);
 
 GraphListS graph_lists_transpose(GraphListS graph);
 
+GraphListS graph_lists_nondirected(GraphListS graph);
+
 #endif

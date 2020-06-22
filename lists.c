@@ -106,6 +106,7 @@ ListSNode* lists_search(ListS list, const ListSElement* const q_p) {
     return NULL;
 }
 
+// TODO: this function seems to be broken.
 void lists_concat(ListS* const first, ListS* const second) {
     if (first->head == NULL) {
         if (second->head == NULL) {
