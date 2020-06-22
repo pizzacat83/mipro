@@ -86,7 +86,6 @@ void lists_print(ListS list, FILE* fp) {
 }
 
 void lists_read(ListS* const list_p) {
-    *list_p = lists_create_empty();
     while (1) {
         ListSElement* element_p = lists_element_new();
         bool ok = lists_element_read(element_p);
@@ -105,4 +104,21 @@ ListSNode* lists_search(ListS list, const ListSElement* const q_p) {
         }
     }
     return NULL;
+}
+
+void lists_concat(ListS* const first, ListS* const second) {
+    if (first->head == NULL) {
+        if (second->head == NULL) {
+        } else {
+            first->head = second->head;
+            first->tail = second->tail;
+            second->head = NULL;
+            second->tail = NULL;
+        }
+    } else {
+        first->tail->next = second->head;
+        first->tail = second->tail;   
+        second->head = NULL;
+        second->tail = NULL;
+    }
 }

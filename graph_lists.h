@@ -15,7 +15,7 @@ GraphListS graph_empty_create(size_t vertex_num, size_t edge_num);
 
 void graph_lists_clear(GraphListS* const graph_p);
 
-GraphListS graph_lists_read(void);
+GraphListS graph_lists_read(bool directed);
 
 void graph_lists_print(GraphListS graph, FILE* const fp);
 

@@ -18,12 +18,24 @@ void graph_lists_clear(GraphListS* const graph_p) {
     free(graph_p->edges);
 }
 
-GraphListS graph_lists_read() {
+GraphListS graph_lists_read(bool directed) {
     size_t vertex_num, edge_num;
     scanf("%ld %ld", &vertex_num, &edge_num);
     GraphListS graph = graph_empty_create(vertex_num, edge_num);
     for (size_t i = 0; i < vertex_num; ++i) {
-        lists_read(&graph.edges[i]);
+        ListS tmp = lists_create_empty();
+        lists_read(&tmp);
+        if (!directed) {
+            LISTS_FOREACH(tmp, node_p) {
+                ListSElement* ep = node_p->value;
+                ListSElement* ep2;
+                NEW(ep2, 1);
+                ep2->j = i;
+                ep2->cost = ep->cost;
+                lists_push_back(&graph.edges[ep->j], ep2);
+            }
+        }
+        lists_concat(&graph.edges[i], &tmp);
     }
     return graph;
 }
