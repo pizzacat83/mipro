@@ -32,6 +32,8 @@ void lists_print(ListS list, FILE* fp);
 
 void lists_read(ListS* const list_p);
 
+void lists_concat(ListS* const first, ListS* const second);
+
 ListSNode* lists_search(ListS list, const ListSElement* const q_p);
 
 #endif
