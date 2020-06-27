@@ -20,7 +20,7 @@ void dijkstra(GraphListS graph, size_t start, double* d) {
     ep->x = 0;
     HEAP.insert(&heap, ep);
 
-    while (!HEAP.empty(&heap)) {
+    while (!HEAP.empty(heap)) {
         const HeapElement* top = HEAP.top(heap);
         size_t v = top->n;
         if (top->x > d[v]) {

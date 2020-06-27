@@ -67,7 +67,7 @@ void prim(GraphListS graph, size_t start, size_t* parents) {
 }
 
 int main() {
-    GraphListS graph = graph_lists_read(true);
+    GraphListS graph = graph_lists_read();
     GraphListS graph2 = graph_lists_nondirected(graph);
     size_t* parents;
     NEW(parents, graph.vertex_num);
