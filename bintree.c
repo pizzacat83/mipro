@@ -1,3 +1,5 @@
+#pragma GCC diagnostic ignored "-Wmissing-prototypes"
+
 #include <stddef.h>
 #include <stdbool.h>
 #include "memory.h"
@@ -9,7 +11,7 @@ typedef BinTreeKey Key;
 typedef BinTreeValue Value;
 
 // key, valueのメモリ確保・解放は呼び出し側の責任
-Node* node_new(const Key* const key, Value* const value) {
+Node* node_new(Key* const key, Value* const value) {
     Node* node;
     NEW(node, 1);
     node->key = key;
@@ -17,6 +19,7 @@ Node* node_new(const Key* const key, Value* const value) {
     node->parent = NULL;
     node->left = NULL;
     node->right = NULL;
+    return node;
 }
 
 void node_delete(Node* const node) {
@@ -27,9 +30,10 @@ void node_delete(Node* const node) {
     node_delete(node->right);
     bintree_key_delete(node->key);
     bintree_value_delete(node->value);
+    free(node);
 }
 
-BinTree bintree_create(BinTreeElementCmpFunc cmp) {
+BinTree bintree_create(BinTreeKeyCmpFunc cmp) {
     BinTree tree;
     tree.cmp = cmp;
     tree.root = NULL;
@@ -73,8 +77,12 @@ Node* bintree_search(const BinTree* const tree, const Key* const key) {
     }
 }
 
-void bintree_insert(BinTree* const tree, const Key* const key, Value* const value) {
+void bintree_insert(BinTree* const tree, Key* const key, Value* const value) {
     Node* node = node_new(key, value);
+    if (tree->root == NULL) {
+        tree->root = node;
+        return;
+    }
     Node* parent;
     bool found = search(tree, key, &parent); // false
     #ifdef DEBUG
@@ -98,4 +106,41 @@ void bintree_insert(BinTree* const tree, const Key* const key, Value* const valu
         #endif
         parent->right = node;
     }
+}
+
+void print_node_sorted(
+    FILE* out,
+    PrintKeyValueFunc print_key_value,
+    const Node* const node
+) {
+    if (node->left) {
+        print_node_sorted(out, print_key_value, node->left);
+    }
+    print_key_value(out, node->key, node->value);
+    if (node->right) {
+        print_node_sorted(out, print_key_value, node->right);
+    }
+}
+
+void bintree_print_sorted(
+    FILE* out,
+    PrintKeyValueFunc print_key_value,
+    const BinTree* const tree
+) {
+    print_node_sorted(out, print_key_value, tree->root);
+}
+
+BinTree bintree_read(
+    BinTreeKeyCmpFunc cmp,
+    ReadKeyValueFunc read_key_value
+) {
+    BinTree tree = bintree_create(cmp);
+    Key* key;
+    Value* value;
+    while (read_key_value(&key, &value)) {
+        log("read ok\n");
+        bintree_insert(&tree, key, value);
+    }
+    log("bintree EOF\n");
+    return tree;
 }

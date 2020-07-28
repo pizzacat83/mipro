@@ -39,10 +39,10 @@ unsigned distance(const String s1, const String s2) {
 int main() {
     String s1;
     String s2;
-    read_new_string(s1, 1000);
-    read_new_string(s2, 1000);
-    printf("%d\n", distance(s1, s2));
-    delete_string(&s1);
-    delete_string(&s2);
+    string_read_new(s1, 1000);
+    string_read_new(s2, 1000);
+    printf("%ud\n", distance(s1, s2));
+    string_delete(&s1);
+    string_delete(&s2);
     return 0;
 }

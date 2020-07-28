@@ -7,4 +7,10 @@ typedef enum {
     GREAT = 1,
 } CmpResult;
 
+#define cmp_builtin(x, y) (\
+    (x) == (y) ? EQUAL \
+  : (x) > (y) ? GREAT \
+  : LESS \
+)
+
 #endif

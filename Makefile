@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -fsanitize=undefined -DDEBUG -Werror -Wall -Wextra -Wconversion -Wbad-function-cast -Wcast-align -Wcast-qual -Wdisabled-optimization -Wdouble-promotion -Wfloat-equal -Wformat -Winit-self -Wjump-misses-init -Wlogical-op -Wmissing-include-dirs -Wmissing-prototypes -Wmultichar -Wpointer-arith -Wswitch-default -Wswitch-enum -Wundef -Wunsafe-loop-optimizations -Wwrite-strings -Wformat-signedness
+CFLAGS = -g -fsanitize=undefined -D DEBUG -Werror -Wall -Wextra -Wconversion -Wbad-function-cast -Wcast-align -Wcast-qual -Wdisabled-optimization -Wdouble-promotion -Wfloat-equal -Wformat -Winit-self -Wjump-misses-init -Wlogical-op -Wmissing-include-dirs -Wmissing-prototypes -Wmultichar -Wpointer-arith -Wswitch-default -Wswitch-enum -Wundef -Wunsafe-loop-optimizations -Wwrite-strings -Wformat-signedness
 
 SOURCES = $(wildcard *.c)
 C_DEPENDS = $(patsubst %.c,%.c.d,$(SOURCES))

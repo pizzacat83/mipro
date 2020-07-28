@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #ifdef DEBUG
-#define log(s, ...) fprintf(stderr, s, __VA_ARGS__)
+#define log(s, ...) fprintf(stderr, s, ##__VA_ARGS__)
 #else
 #define log
 #endif

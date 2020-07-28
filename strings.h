@@ -3,22 +3,43 @@
 
 #include <stdio.h>
 #include "memory.h"
+#include "cmp.h"
 
 typedef struct {
     char* chars;
     size_t length;
 } String;
 
-String helper_read_new_string(char* const buf);
+// NULL文字があるところまでコピーした新しい配列を作る
+// charsの解放は呼び出し元の責任
+String string_from_chars(const char* const chars);
 
-#define read_new_string(str, length) do {\
+#define string_read_new(str, length) do {\
     char* buf;\
     NEW(buf, (length) + 1);\
     scanf("%" #length "s", buf);\
-    (str) = helper_read_new_string(buf);\
+    (str) = string_from_chars(buf);\
     free(buf);\
 } while(0)
 
-void delete_string(String* const str);
+#define string_try_read_new(str, length, ok) do {\
+    char* buf;\
+    NEW(buf, (length) + 1);\
+    int scanf_res = scanf("%" #length "s", buf);\
+    if (scanf_res < 1) {\
+        free(buf);\
+        (ok) = false;\
+    } else {\
+        (str) = string_from_chars(buf);\
+        free(buf);\
+        (ok) = true;\
+    }\
+} while(0)
+
+void string_delete(String* const str);
+
+CmpResult string_cmp(String str1, String str2);
+
+void string_print(FILE* const out, String str);
 
 #endif
