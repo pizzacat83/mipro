@@ -5,7 +5,7 @@
 #include "./memory.h"
 #include "./heap.h"
 
-Heap create_empty(size_t max_size, CmpFunc cmp) {
+Heap create_empty(size_t max_size, HeapElementCmpFunc cmp) {
     Heap heap;
     heap.max_size = max_size;
     heap.size = 0;
@@ -58,7 +58,7 @@ static void heapify(Heap* const heap_p, size_t parent) {
     heapify(heap_p, new_parent);
 }
 
-Heap create_from(HeapElement** array, size_t size, size_t max_size, CmpFunc cmp) {
+Heap create_from(HeapElement** array, size_t size, size_t max_size, HeapElementCmpFunc cmp) {
     if (max_size < size) {
         fprintf(stderr, "Warning(heap_create_from): Heap max_size is smaller than size. Extending max_size to size.");
         max_size = size;

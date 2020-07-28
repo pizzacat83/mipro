@@ -9,12 +9,12 @@ typedef struct {
     size_t max_size;
     size_t size;
     HeapElement** tree;
-    CmpFunc cmp;
+    HeapElementCmpFunc cmp;
 } Heap;
 
 typedef struct {
-    Heap (*create_empty)(size_t max_size, CmpFunc cmp);
-    Heap (*create_from)(HeapElement** array, size_t size, size_t max_size, CmpFunc cmp);
+    Heap (*create_empty)(size_t max_size, HeapElementCmpFunc cmp);
+    Heap (*create_from)(HeapElement** array, size_t size, size_t max_size, HeapElementCmpFunc cmp);
     void (*clear)(Heap* const heap_p);
     const HeapElement* (*top)(Heap heap);
     void (*pop)(Heap* const heap_p);
