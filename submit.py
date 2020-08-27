@@ -37,7 +37,7 @@ def add_dependency(filename1):
 
 add_dependency(f"{probname}.c")
 
-print('These files will be uploaded:', files)
+print('These files will be uploaded:', sorted(files))
 
 with open('submit.secrets.json') as f:
     secrets = json.load(f)
