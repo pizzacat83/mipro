@@ -18,6 +18,7 @@ void graph_lists_clear(GraphListS* const graph_p) {
     free(graph_p->edges);
 }
 
+// コピーを作るので，引数はfree可能です
 GraphListS graph_lists_nondirected(GraphListS graph) {
     GraphListS graph2 = graph_empty_create(graph.vertex_num, graph.edge_num * 2);
     for (size_t i = 0; i < graph.vertex_num; ++i) {
@@ -40,7 +41,7 @@ GraphListS graph_lists_nondirected(GraphListS graph) {
 
 GraphListS graph_lists_read() {
     size_t vertex_num, edge_num;
-    scanf("%ld %ld", &vertex_num, &edge_num);
+    scanf("%lu %lu", &vertex_num, &edge_num);
     GraphListS graph = graph_empty_create(vertex_num, edge_num);
     for (size_t i = 0; i < vertex_num; ++i) {
         lists_read(&graph.edges[i]);
@@ -49,7 +50,7 @@ GraphListS graph_lists_read() {
 }
 
 void graph_lists_print(GraphListS graph, FILE* fp) {
-    fprintf(fp, "%ld %ld\n", graph.vertex_num, graph.edge_num);
+    fprintf(fp, "%lu %lu\n", graph.vertex_num, graph.edge_num);
     for (size_t i = 0; i < graph.vertex_num; ++i) {
         lists_print(graph.edges[i], fp);
     }

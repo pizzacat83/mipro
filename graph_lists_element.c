@@ -13,7 +13,7 @@ void lists_element_delete(ListSElement* const element_p) {
 }
 
 void lists_element_print(const ListSElement* const element_p, FILE* const fp) {
-    fprintf(fp, "%ld %f", element_p->j + 1, element_p->cost);
+    fprintf(fp, "%lu %f", element_p->j + 1, element_p->cost);
 }
 
 bool lists_element_read(ListSElement* element_p) {

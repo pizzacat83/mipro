@@ -31,7 +31,7 @@ void prim(GraphListS graph, size_t start, size_t* parents) {
         if (HEAP.empty(heap)) {
             for (size_t i = 0; i < graph.vertex_num; ++i) {
                 if (used[i]) {
-                    fprintf(stderr, "%ld ", i + 1);
+                    fprintf(stderr, "%lu ", i + 1);
                 }
             }
             fprintf(stderr, "\n");
@@ -69,16 +69,16 @@ void prim(GraphListS graph, size_t start, size_t* parents) {
 int main() {
     GraphListS graph = graph_lists_read();
     GraphListS graph2 = graph_lists_nondirected(graph);
+    graph_lists_clear(&graph);
     size_t* parents;
     NEW(parents, graph.vertex_num);
 
     prim(graph2, 0, parents);
 
     for (size_t i = 0; i < graph2.vertex_num; ++i) {
-        printf("%ld %ld\n", i + 1, parents[i] + 1);
+        printf("%lu %lu\n", i + 1, parents[i] + 1);
     }
 
-    graph_lists_clear(&graph);
     graph_lists_clear(&graph2);
     free(parents);
     return 0;
