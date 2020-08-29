@@ -9,7 +9,12 @@
         "system_error": "c",
         "array": "c",
         "tuple": "c",
-        "utility": "c"
+        "utility": "c",
+        "*.tcc": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c"
     },
     "files.exclude": {
         "**/.git": true,
